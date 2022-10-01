@@ -18,9 +18,10 @@ GPIO.setup(in3,GPIO.OUT)
 GPIO.setup(enb,GPIO.OUT)
 GPIO.output(in4,GPIO.LOW)
 GPIO.output(in3,GPIO.LOW)
-p=GPIO.PWM(enb,1000)
+# p=GPIO.PWM(enb,1000)
 
 def move(direction):
+    GPIO.output(enb, GPIO.HIGH)
     if(direction=="FWD"):
         print("forward")
         GPIO.output(in4, GPIO.HIGH)
@@ -52,6 +53,7 @@ while(1):
     sleep(.1)
     GPIO.output(in4, GPIO.LOW)
     GPIO.output(in3, GPIO.LOW)
+    GPIO.output(enb, GPIO.LOW)
 
     
 GPIO.cleanup()
