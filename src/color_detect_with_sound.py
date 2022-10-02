@@ -3,10 +3,13 @@ import numpy as np
 import sounddevice as sd
 import soundfile as sf
 import random
+import os
 
+os.chdir(os.getcwd() + '/data')
 
-
-sound_files = ['/home/pi/hack-uta/src/data/sussy_baka.wav','/home/pi/hack-uta/src/data/sus_music.wav','/home/pi/hack-uta/src/data/sus_sound.wav']
+sound_files = ['sussy_baka.wav',
+                'sus_music.wav',
+                'sus_sound.wav']
 
 # Initialize camera. 2 is for the stereo camera
 webcam = cv2.VideoCapture(0)
@@ -25,6 +28,7 @@ lower_bound = np.array([100,150,0])
 upper_bound = np.array([140,255,255])
 
 is_recording : bool = True
+play_sound : bool = False
 
 # Starting video capture
 while is_recording:
@@ -48,7 +52,7 @@ while is_recording:
     for pic, contour in enumerate(contours):
         area = cv2.contourArea(contour)
         if(area > 400):
-
+            play_sound = True
             x, y, w, h = cv2.boundingRect(contour)
             imageFrame = cv2.rectangle(im, (x, y),
                                        (x + w, y + h),
@@ -57,14 +61,21 @@ while is_recording:
             cv2.putText(im, "Potential Pepsi (Sus)", (x, y),
                         cv2.FONT_HERSHEY_SIMPLEX,
                         1.0, (255, 0, 0))
-            i = random.randrange(0,3,1)
-            data, fs = sf.read(sound_files[i])
-            sd.play(data, fs)
-            status = sd.wait()
+
 
     output = cv2.drawContours(segmented_im, contours, -1, (0,0,225), 3)
 
-    cv2.imshow("Output", imageFrame)
+
+    if play_sound:
+        cv2.imshow("Output", imageFrame)
+
+        i = random.randrange(0,3,1)
+        data, fs = sf.read(sound_files[i])
+        sd.play(data, fs)
+        status = sd.wait()
+    else:
+        cv2.imshow("Output", im)
+
 
     escape_key : int = 27
     key = cv2.waitKey(500)
