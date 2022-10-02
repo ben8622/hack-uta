@@ -5,35 +5,77 @@ import RPi.GPIO as GPIO
 import keyboard       
 from time import sleep
 
-in4 = 24
+in1 = 15
+in2 = 14
 in3 = 23
+in4 = 24
+ena = 18
 enb = 25
 temp1=1
 
-# GPIO.setwarnings(False)
-
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(in4,GPIO.OUT)
+
+GPIO.setup(in1,GPIO.OUT)
+GPIO.setup(in2,GPIO.OUT)
 GPIO.setup(in3,GPIO.OUT)
+GPIO.setup(in4,GPIO.OUT)
+GPIO.setup(ena,GPIO.OUT)
 GPIO.setup(enb,GPIO.OUT)
-GPIO.output(in4,GPIO.LOW)
+
+GPIO.output(in1,GPIO.LOW)
+GPIO.output(in2,GPIO.LOW)
 GPIO.output(in3,GPIO.LOW)
-# p=GPIO.PWM(enb,1000)
+GPIO.output(in4,GPIO.LOW)
+
+p1=GPIO.PWM(ena,1000)
+p2=GPIO.PWM(enb,1000)
+
+duty_cycle = 50
+
+p1.start(duty_cycle)
+p2.start(duty_cycle)
 
 def move(direction):
+    GPIO.output(ena, GPIO.HIGH)
     GPIO.output(enb, GPIO.HIGH)
+    
     if(direction=="FWD"):
         print("forward")
-        GPIO.output(in4, GPIO.HIGH)
+        GPIO.output(in1, GPIO.LOW)
+        GPIO.output(in2, GPIO.HIGH)
         GPIO.output(in3, GPIO.LOW)
+        GPIO.output(in4, GPIO.HIGH)
+ 
     elif(direction=="BCKWD"):
         print("backward")
-        GPIO.output(in4, GPIO.LOW)
+        GPIO.output(in1, GPIO.HIGH)
+        GPIO.output(in2, GPIO.LOW)
         GPIO.output(in3, GPIO.HIGH)
+        GPIO.output(in4, GPIO.LOW)       
     elif(direction=="LEFT"):
         print("left")
+        GPIO.output(in1, GPIO.LOW)
+        GPIO.output(in2, GPIO.HIGH)
+        GPIO.output(in3, GPIO.LOW)
+        GPIO.output(in4, GPIO.LOW)
     elif(direction=="RIGHT"):
         print("right")
+        GPIO.output(in1, GPIO.LOW)
+        GPIO.output(in2, GPIO.LOW)
+        GPIO.output(in3, GPIO.LOW)
+        GPIO.output(in4, GPIO.HIGH)
+        
+def change_duty_cycle(amount):
+    tmp = duty_cycle + amount
+    print(tmp)
+    if(tmp >= 10 or tmp <= 100):
+        duty_cycle = tmp
+        p1.ChangeDutyCycle(duty_cycle)
+        p2.ChangeDutyCycle(duty_cycle)
+    
+#     p1.ChangeDutyCycle(duty_cycle)
+#     p2.ChangeDutyCycle(duty_cycle)
+    
 
 while(1):
     try:
@@ -48,11 +90,25 @@ while(1):
             move("LEFT")
         elif(keyboard.is_pressed('d')):
             move("RIGHT")
+        elif(keyboard.is_pressed('p')):
+            if(duty_cycle+10 <= 100):
+                duty_cycle += 10
+            p1.ChangeDutyCycle(duty_cycle)
+            p2.ChangeDutyCycle(duty_cycle)
+        elif(keyboard.is_pressed('o')):
+            if(duty_cycle-10 >= 10):
+                duty_cycle -= 10
+            p1.ChangeDutyCycle(duty_cycle)
+            p2.ChangeDutyCycle(duty_cycle)
     except:
         continue
+    
     sleep(.1)
-    GPIO.output(in4, GPIO.LOW)
+    GPIO.output(in1, GPIO.LOW)
+    GPIO.output(in2, GPIO.LOW)
     GPIO.output(in3, GPIO.LOW)
+    GPIO.output(in4, GPIO.LOW)
+    GPIO.output(ena, GPIO.LOW)
     GPIO.output(enb, GPIO.LOW)
 
     
