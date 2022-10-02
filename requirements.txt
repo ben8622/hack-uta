@@ -1,2 +1,5 @@
 keyboard
 twilio
+sounddevice
+soundfile
+numpy

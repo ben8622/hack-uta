@@ -66,6 +66,7 @@ def move(direction):
 
 def send_txt():
     os.system(f"python send_text.py")
+    os.system(f"python play_sound.py")
 
 ################
 ##### MAIN #####
