@@ -1,1 +1,2 @@
 twilio_creds.py
+*.pyc

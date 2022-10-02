@@ -55,11 +55,11 @@ def move(direction):
         print("left")
         GPIO.output(in1, GPIO.LOW)
         GPIO.output(in2, GPIO.HIGH)
-        GPIO.output(in3, GPIO.LOW)
+        GPIO.output(in3, GPIO.HIGH)
         GPIO.output(in4, GPIO.LOW)
     elif(direction=="RIGHT"):
         print("right")
-        GPIO.output(in1, GPIO.LOW)
+        GPIO.output(in1, GPIO.HIGH)
         GPIO.output(in2, GPIO.LOW)
         GPIO.output(in3, GPIO.LOW)
         GPIO.output(in4, GPIO.HIGH)
