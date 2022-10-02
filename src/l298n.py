@@ -1,5 +1,7 @@
 import RPi.GPIO as GPIO   
-import keyboard       
+import keyboard
+from twilio.rest import Client   
+import os   
 from time import sleep
 
 in1 = 15
@@ -62,6 +64,9 @@ def move(direction):
         GPIO.output(in3, GPIO.LOW)
         GPIO.output(in4, GPIO.HIGH)
 
+def send_txt():
+    os.system(f"python send_text.py")
+
 ################
 ##### MAIN #####
 ################
@@ -88,6 +93,8 @@ while(1):
                 duty_cycle -= 10
             p1.ChangeDutyCycle(duty_cycle)
             p2.ChangeDutyCycle(duty_cycle)
+        elif(keyboard.is_pressed('y')):
+            send_txt()
     except:
         continue
     
