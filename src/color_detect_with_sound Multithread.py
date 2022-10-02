@@ -45,8 +45,8 @@ webcam = cv2.VideoCapture(1)
 
 
 # # Camera Capture resolution
-x_res : int = 1280
-y_res : int = 720
+x_res : int = 1920
+y_res : int = 1080
 
 webcam.set(3, x_res)
 webcam.set(4, y_res)
@@ -54,7 +54,7 @@ webcam.set(4, y_res)
 # initialize variables
 
 # Color to detect bounds
-threshold = 25
+threshold = 30
 
 # Blue
 b_lower_bound = np.array([100,150,0])
@@ -95,7 +95,7 @@ while is_recording:
                                        (x + w, y + h),
                                        (255, 0, 0), 2)
               
-            cv2.putText(im, "Potential Pepsi (Sus)", (x, y),
+            cv2.putText(im, "Kinda Sus", (x, y),
                         cv2.FONT_HERSHEY_TRIPLEX,
                         1.3, (255, 10, 10))
         else:
